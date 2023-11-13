@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .slider-container {
+            width: 80%;
+            margin: 0 auto;
+            position: relative;
+            padding:  30px;
+        }
+        
+        .range-slider {
+            width: 100%;
+            height: 5px;
+            background-color: #ccc;
+            position: relative;
+        }
+        
+        .slider-button {
+            width: 20px;
+            height: 20px;
+            background-color: #2155d9;
+            border-radius: 50%;
+            position: absolute;
+            top: -10px;
+            cursor: pointer;
+            transform: translateX(-50%);
+            color: white;
+        }
+
+        /* Set initial positions */
+        .slider-button1 {
+            left: 90%;
+        }
+
+        .slider-button2 {
+            left: 80%;
+        }
+
+        .slider-button3 {
+            left: 70%;
+        }
+
+        .slider-button4 {
+            left: 60%;
+        }
+
+        .slider-button5 {
+            left: 50%;
+        }
+
+        .slider-button6 {
+            left: 40%;
+        }
+
+        .slider-button7 {
+            left: 30%;
+        }
+
+        .slider-button8 {
+            left: 20%;
+        }
+        
+        .value-label {
+            position: absolute;
+            top: 25px;
+            transform: translateX(-50%);
+            display: none;
+
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <div class="range-slider" id="range-slider">
+            <div class="slider-button slider-button1" id="A">
+                <center>A</center>
+            </div>
+            <div class="slider-button slider-button2" id="A-">
+                <center>A-</center>
+            </div>
+            <div class="slider-button slider-button3" id="B">
+                <center>B</center>
+            </div>
+            <div class="slider-button slider-button4" id="B-">
+                <center>B-</center>
+            </div>
+            <div class="slider-button slider-button5" id="C">
+                <center>C</center>
+            </div>
+            <div class="slider-button slider-button6" id="C-">
+                <center>C-</center>
+            </div>
+            <div class="slider-button slider-button7" id="D">
+                <center>D</center>
+            </div>
+            <div class="slider-button slider-button8" id="E">
+                <center>E</center>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slider = document.getElementById("range-slider");
+        const buttons = document.querySelectorAll(".slider-button");
+        const valueLabel = document.createElement("div");
+        valueLabel.classList.add("value-label");
+        slider.appendChild(valueLabel);
+
+        buttons.forEach((button, index) => {
+            button.addEventListener("mousedown", (e) => {
+                e.preventDefault();
+                button.classList.add("active");
+
+                const onMouseMove = (e) => {
+                    const sliderRect = slider.getBoundingClientRect();
+                    const newPosition = ((e.clientX - sliderRect.left) / sliderRect.width) * 100;
+                    const minValue = 0;
+                    const maxValue = 100;
+
+                    const currentValue = Math.min(maxValue, Math.max(minValue, newPosition));
+                    button.style.left = `${currentValue}%`;
+
+                    // Update the value label
+                    valueLabel.textContent = `Value: ${currentValue.toFixed(0)}`;
+                };
+
+                const onMouseUp = () => {
+                    button.classList.remove("active");
+                    document.removeEventListener("mousemove", onMouseMove);
+                    document.removeEventListener("mouseup", onMouseUp);
+                };
+
+                document.addEventListener("mousemove", onMouseMove);
+                document.addEventListener("mouseup", onMouseUp);
+            });
+
+            button.addEventListener("mouseover", () => {
+                // Show the button id on hover
+                valueLabel.style.display = "block";
+                valueLabel.textContent = `ID: ${button.id}`;
+            });
+
+            button.addEventListener("mouseout", () => {
+                // Hide the button id when not hovering
+                valueLabel.style.display = "none";
+            });
+        });
+    </script>
+</body>
+</html>
